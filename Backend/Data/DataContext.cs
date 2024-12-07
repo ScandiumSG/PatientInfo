@@ -5,6 +5,6 @@ namespace Backend.Data
 {
     public class DataContext: DbContext
     {
-        public required DbSet<PatientModel> Patients { get; set; }
+        public required DbSet<Patient> Patients { get; set; }
     }
 }

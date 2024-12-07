@@ -25,17 +25,17 @@ namespace Backend.Endpoint
             return TypedResults.Ok(); 
         }
 
-        public static IResult CreatePatient(IRepository<PatientModel> repo) 
+        public static IResult CreatePatient(IRepository<Patient> repo) 
         {
             return TypedResults.Ok();
         }
 
-        public static IResult UpdatePatient(IRepository<PatientModel> repo) 
+        public static IResult UpdatePatient(IRepository<Patient> repo) 
         {
             return TypedResults.Ok();
         }
 
-        public static IResult DeletePatient(IRepository<PatientModel> repo) 
+        public static IResult DeletePatient(IRepository<Patient> repo) 
         {
             return TypedResults.Ok();
         }

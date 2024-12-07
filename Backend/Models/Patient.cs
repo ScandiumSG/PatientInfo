@@ -1,6 +1,6 @@
 ﻿namespace Backend.Models
 {
-    public class PatientModel
+    public class Patient
     {
         public Guid Id { get; set; }
 
