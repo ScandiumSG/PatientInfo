@@ -1,4 +1,10 @@
 
+using Backend.Data;
+using Backend.Endpoint;
+using Backend.Models;
+using Backend.Repository;
+using Microsoft.EntityFrameworkCore;
+
 namespace PatientInfo.Server
 {
     public class Program
@@ -14,6 +20,10 @@ namespace PatientInfo.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<DataContext>((opt) => opt.UseInMemoryDatabase("PatientInMemoryDatabase"));
+
+            builder.Services.AddScoped<IRepository<PatientModel>, Repository<PatientModel>>();
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
@@ -27,11 +37,9 @@ namespace PatientInfo.Server
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
 
-
-            app.MapControllers();
+            app.PatientEndpointConfiguration();
 
             app.MapFallbackToFile("/index.html");
 
