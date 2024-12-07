@@ -1,5 +1,6 @@
 ﻿
 using Backend.Data;
+using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repository
@@ -16,33 +17,42 @@ namespace Backend.Repository
         }
 
         /// <inheritdoc />
-        public async T Create(T entity)
+        public async Task<T?> Create(T entity)
         {
-            throw new NotImplementedException();
+            var res = await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return res.Entity;
         }
 
         /// <inheritdoc />
-        public async T Delete(Guid id)
+        public async Task<T?> Delete(T entity)
         {
-            throw new NotImplementedException();
+            var res = _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return res.Entity;
         }
 
         /// <inheritdoc />
-        public async List<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _dbSet.ToListAsync();
         }
 
         /// <inheritdoc />
-        public async T GetSpecific(Guid id)
+        public async Task<T?> GetSpecific(Guid id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
         /// <inheritdoc />
-        public async T Update(T entity)
+        public async Task<T?> Update(T entity)
         {
-            throw new NotImplementedException();
+            var res = _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+
+            return res.Entity;
         }
     }
 }
