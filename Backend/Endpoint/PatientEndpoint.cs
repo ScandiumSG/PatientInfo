@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using System;
 
 namespace Backend.Endpoint
 {
@@ -15,29 +16,54 @@ namespace Backend.Endpoint
             endpointGroup.MapDelete("/{id}", DeletePatient);
         }
 
-        public static IResult GetAll() 
+        public static async Task<IResult> GetAll(IRepository<Patient> repo) 
         {
-            return TypedResults.Ok();
+            List<Patient> patients = await repo.GetAll();
+
+            return TypedResults.Ok(patients);
         }
 
-        public static IResult GetSpecific(int id) 
-        { 
-            return TypedResults.Ok(); 
+        public static async Task<IResult> GetSpecific(IRepository<Patient> repo, Guid id) 
+        {
+            Patient patient = await repo.GetSpecific(id);
+
+            return TypedResults.Ok(patient); 
         }
 
-        public static IResult CreatePatient(IRepository<Patient> repo) 
+        public static async Task<IResult> CreatePatient(IRepository<Patient> repo, PatientCreateModel inputPatient) 
         {
-            return TypedResults.Ok();
+            Patient patient = new Patient() {
+                Id = new Guid(),
+                Name = inputPatient.Name,
+                DateOfBirth = inputPatient.DateOfBirth,
+                Conditions = inputPatient?.Conditions?.Count > 0 ? inputPatient.Conditions : new List<string>()
+            };
+
+            Patient savedPatient = await repo.Create(patient);
+
+            return TypedResults.Created($"{savedPatient.Id}");
         }
 
-        public static IResult UpdatePatient(IRepository<Patient> repo) 
+        public static async Task<IResult> UpdatePatient(IRepository<Patient> repo, PatientUpdateModel inputPatient) 
         {
-            return TypedResults.Ok();
+            Patient dbPatient = await repo.GetSpecific(inputPatient.Id);
+
+            Patient updatedPatientObject = new Patient() 
+            {
+                Id = inputPatient.Id,
+                Name = inputPatient.Name ?? dbPatient.Name,
+                DateOfBirth = inputPatient.DateOfBirth ?? dbPatient.DateOfBirth,
+                Conditions = inputPatient?.Conditions ?? dbPatient.Conditions
+            };
+
+            Patient updatedPatient = await repo.Update(updatedPatientObject);
+            return TypedResults.Created($"/{updatedPatient.Id}");
         }
 
-        public static IResult DeletePatient(IRepository<Patient> repo) 
+        public static async Task<IResult> DeletePatient(IRepository<Patient> repo, Guid id) 
         {
-            return TypedResults.Ok();
+            Patient deletedPatient = await repo.Delete(id);
+            return TypedResults.Ok(deletedPatient);
         }
     }
 }

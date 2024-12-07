@@ -8,6 +8,6 @@
 
         public DateTime? DateOfBirth { get; set; }
 
-        public List<string>? Conditions { get; set; } = new List<string>();
+        public List<string> Conditions { get; set; } = new List<string>();
     }
 }
