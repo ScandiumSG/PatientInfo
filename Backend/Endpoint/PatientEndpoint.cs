@@ -50,34 +50,42 @@ namespace Backend.Endpoint
                 Conditions = inputPatient?.Conditions?.Count > 0 ? inputPatient.Conditions : new List<string>()
             };
 
-            Patient savedPatient = await repo.Create(patient);
+            Patient? savedPatient = await repo.Create(patient);
 
-            return TypedResults.Created($"{savedPatient.Id}");
+            return TypedResults.Created($"{savedPatient?.Id}");
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> UpdatePatient(IRepository<Patient> repo, PatientUpdateModel inputPatient) 
         {
-            Patient dbPatient = await repo.GetSpecific(inputPatient.Id);
+            Patient? dbPatient = await repo.GetSpecific(inputPatient.Id);
 
-            Patient updatedPatientObject = new Patient() 
+            if (dbPatient == null) 
             {
-                Id = inputPatient.Id,
-                Name = inputPatient.Name ?? dbPatient.Name,
-                DateOfBirth = inputPatient.DateOfBirth ?? dbPatient.DateOfBirth,
-                Conditions = inputPatient?.Conditions ?? dbPatient.Conditions
-            };
+                return TypedResults.NotFound();
+            }
 
-            Patient updatedPatient = await repo.Update(updatedPatientObject);
-            return TypedResults.Created($"/{updatedPatient.Id}");
+            dbPatient.Name = inputPatient.Name ?? dbPatient.Name;
+            dbPatient.DateOfBirth = inputPatient.DateOfBirth ?? dbPatient.DateOfBirth;
+            dbPatient.Conditions = inputPatient?.Conditions ?? dbPatient.Conditions;
+
+            Patient? updatedPatient = await repo.Update(dbPatient);
+            return TypedResults.Created($"/{updatedPatient?.Id}");
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> DeletePatient(IRepository<Patient> repo, Guid id) 
         {
-            Patient? deletedPatient = await repo.Delete(id);
+            Patient? dbPatient = await repo.GetSpecific(id);
+            if (dbPatient == null) 
+            {
+                return TypedResults.NotFound();
+            }
+
+            Patient? deletedPatient = await repo.Delete(dbPatient);
 
             if (deletedPatient == null) 
             {
