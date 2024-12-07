@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace Backend.Endpoint
@@ -16,6 +17,7 @@ namespace Backend.Endpoint
             endpointGroup.MapDelete("/{id}", DeletePatient);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAll(IRepository<Patient> repo) 
         {
             List<Patient> patients = await repo.GetAll();
@@ -23,13 +25,22 @@ namespace Backend.Endpoint
             return TypedResults.Ok(patients);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetSpecific(IRepository<Patient> repo, Guid id) 
         {
-            Patient patient = await repo.GetSpecific(id);
+            Patient? patient = await repo.GetSpecific(id);
+
+            if (patient == null) 
+            {
+                return TypedResults.NotFound();
+            }
 
             return TypedResults.Ok(patient); 
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> CreatePatient(IRepository<Patient> repo, PatientCreateModel inputPatient) 
         {
             Patient patient = new Patient() {
@@ -44,6 +55,8 @@ namespace Backend.Endpoint
             return TypedResults.Created($"{savedPatient.Id}");
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> UpdatePatient(IRepository<Patient> repo, PatientUpdateModel inputPatient) 
         {
             Patient dbPatient = await repo.GetSpecific(inputPatient.Id);
@@ -60,9 +73,17 @@ namespace Backend.Endpoint
             return TypedResults.Created($"/{updatedPatient.Id}");
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> DeletePatient(IRepository<Patient> repo, Guid id) 
         {
-            Patient deletedPatient = await repo.Delete(id);
+            Patient? deletedPatient = await repo.Delete(id);
+
+            if (deletedPatient == null) 
+            {
+                return TypedResults.NotFound();
+            }
+
             return TypedResults.Ok(deletedPatient);
         }
     }
