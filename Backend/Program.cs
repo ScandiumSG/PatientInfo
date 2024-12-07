@@ -20,7 +20,7 @@ namespace PatientInfo.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<DataContext>((opt) => opt.UseInMemoryDatabase("PatientInMemoryDatabase"));
+            builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PatientInMemoryDatabase"));
 
             builder.Services.AddScoped<IRepository<Patient>, Repository<Patient>>();
 
