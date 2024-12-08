@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ListView from "../components/ListView/ListView";
 import { GetPatientEndpoint, GetSearchEndpoint } from "../util/ConnectionUtil";
 import CreateForm from "../components/CreateForm/CreateForm";
+import SearchField from "../components/CreateForm/SearchField/SearchField";
 
 const ListPage = () => {
     const [patientData, setPatientData] = useState([]);
@@ -18,14 +19,23 @@ const ListPage = () => {
     const fetchAll = async () => {
         await fetch(GetPatientEndpoint())
             .then((res) => res.json())
-            .then((res) => setPatientData(res));
+            .then((res) => setPatientData([...res]));
     };
 
-    const fetchSearch = async (name) => {
-        const opt = {
-            Method: "POST",
+    const fetchSearch = async (searchTerm) => {
+        const searchData = {
+            name: searchTerm,
         };
-        await fetch(GetSearchEndpoint, opt);
+
+        const opt = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(searchData),
+        };
+
+        await fetch(GetSearchEndpoint(), opt)
+            .then((res) => res.json())
+            .then((res) => setPatientData([...res]));
     };
 
     useEffect(() => {
@@ -34,8 +44,9 @@ const ListPage = () => {
 
     return (
         <div>
-            <CreateForm />
-            <ListView listData={patientData} />
+            <CreateForm refetch={triggerFetch} />
+            <SearchField value={searchInfo} change={setSearchInfo} />
+            <ListView refetch={triggerFetch} listData={patientData} />
         </div>
     );
 };
