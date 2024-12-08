@@ -15,6 +15,7 @@ namespace Backend.Endpoint
             endpointGroup.MapPost("/", CreatePatient);
             endpointGroup.MapPut("/", UpdatePatient);
             endpointGroup.MapDelete("/{id}", DeletePatient);
+            endpointGroup.MapPost("/search/", SearchPatientRecords);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -93,6 +94,15 @@ namespace Backend.Endpoint
             }
 
             return TypedResults.Ok(deletedPatient);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> SearchPatientRecords(PatientRepository repo, SearchRecordsModel search) 
+        {
+            List<Patient> matchingPatients = await repo.GetPatientByName(search.Name);
+
+            return TypedResults.Ok(matchingPatients);
         }
     }
 }
