@@ -33,3 +33,5 @@ As the backend would then use default ports, which might be occupied the fronten
 ## Implementation notes
 
 Error handling handled primarily by HTTP codes. Usage of REST API makes the usage of 4xx codes a quick and easy method of implementing error handling.
+
+The frontend is a very quick, simple, and basic implementation. Just intended to quickly visualize and make the data available. Responsive design and accessibility has not been a focus due to limited time and scope of the project.
