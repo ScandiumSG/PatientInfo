@@ -1,7 +1,7 @@
 import ListNode from "./ListNode/ListNode";
 
-const ListView = ({ listData }) => {
-    if (listData.length == 0) {
+const ListView = ({ refetch, listData }) => {
+    if (listData.length === 0) {
         return (
             <div>
                 <p>No patient records found.</p>
@@ -11,9 +11,10 @@ const ListView = ({ listData }) => {
 
     return (
         <div>
-            {listData?.array?.forEach(node, (index) => {
-                <ListNode data={node} key={index} />;
-            })}
+            <h3>Patients</h3>
+            {listData.map((node, index) => (
+                <ListNode refetch={refetch} data={node} key={index} />
+            ))}
         </div>
     );
 };
