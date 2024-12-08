@@ -14,15 +14,11 @@
         {
             DateTime currentTime = DateTime.Now;
 
-            int PatientAge = 0;
+            int PatientAge = currentTime.Year - DateOfBirth.Year;
 
-            if (currentTime.Month >= DateOfBirth.Month && currentTime.Day >= DateOfBirth.Day) 
+            if (currentTime < DateOfBirth.AddYears(PatientAge))
             {
-                PatientAge = currentTime.Year - DateOfBirth.Year;
-            } 
-            else 
-            {
-                PatientAge = currentTime.Year - DateOfBirth.Year - 1;
+                PatientAge--;
             }
 
             return PatientAge;
