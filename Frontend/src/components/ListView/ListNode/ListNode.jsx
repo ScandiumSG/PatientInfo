@@ -29,10 +29,8 @@ const ListNode = ({ refetch, data }) => {
     };
 
     const handleAddCondition = async () => {
-        if (newCondition.trim()) {
-            const updatedConditions = [...localConditions, newCondition];
-            await updateBackendData(updatedConditions);
-        }
+        const updatedConditions = [...localConditions, newCondition];
+        await updateBackendData(updatedConditions);
     };
 
     /**
@@ -73,9 +71,10 @@ const ListNode = ({ refetch, data }) => {
 
         await fetch(GetPatientEndpoint(), opt)
             .then((res) => {
-                if (res.status === 200) {
+                if (res.status === 201) {
+                    setLocalConditions(conditionList);
+                    setNewCondition("");
                     refetch();
-                    setConditions(conditionList);
                 }
             })
             .catch((error) => {
@@ -96,13 +95,12 @@ const ListNode = ({ refetch, data }) => {
                 {editingConditions ? (
                     <div>
                         {localConditions.map((cond, index) => (
-                            <div>
+                            <div key={index}>
                                 <input
                                     onChange={(e) =>
                                         handleUpdateCondition(e, index)
                                     }
                                     value={localConditions[index]}
-                                    key={index}
                                 ></input>
                                 <button
                                     className={styles.removeButton}
