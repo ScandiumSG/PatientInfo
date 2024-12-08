@@ -25,6 +25,18 @@ namespace PatientInfo.Server
             builder.Services.AddScoped<IRepository<Patient>, Repository<Patient>>();
             builder.Services.AddScoped<PatientRepository, PatientRepository>();
 
+            // Add CORS policy that allows everything
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()    // Allows any origin
+                        .AllowAnyMethod()    // Allows any HTTP method (GET, POST, PUT, DELETE, etc.)
+                        .AllowAnyHeader();   // Allows any headers
+                });
+            });
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
@@ -37,6 +49,7 @@ namespace PatientInfo.Server
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
