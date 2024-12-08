@@ -23,6 +23,7 @@ namespace PatientInfo.Server
             builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PatientInMemoryDatabase"));
 
             builder.Services.AddScoped<IRepository<Patient>, Repository<Patient>>();
+            builder.Services.AddScoped<PatientRepository, PatientRepository>();
 
             var app = builder.Build();
 
