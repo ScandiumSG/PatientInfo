@@ -1,0 +1,55 @@
+.createFormContainer {
+    position: relative; /* Keeps the component within the flow of the page */
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.stickyButton {
+    position: sticky;
+    top: 20px;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.stickyButton:hover {
+    background-color: #45a049;
+}
+
+.submitButton {
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submitButton:hover {
+    background-color: #0056b3;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formLine {
+    margin-bottom: 10px;
+}
+
+.conditionsList {
+    margin-top: 10px;
+    padding-left: 20px;
+}

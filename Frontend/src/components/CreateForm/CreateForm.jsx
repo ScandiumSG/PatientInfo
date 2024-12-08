@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import FormLine from "./FormLine/FormLine";
 import FormConditions from "./FormConditions/FormConditions";
 import { GetPatientEndpoint } from "../../util/ConnectionUtil";
+import styles from "./CreateForm.module.css";
 
 const formDataTemplate = {
     Name: "",
     DateOfBirth: "",
 };
 
-const CreateForm = () => {
+const CreateForm = ({ refetch }) => {
     const [show, setShow] = useState(false);
     const [formData, setFormData] = useState(formDataTemplate);
     const [conditions, setConditions] = useState([]);
@@ -39,7 +40,8 @@ const CreateForm = () => {
                 if (res.status === 201) {
                     setShow(false);
                     setConditions([]);
-                    setFormData(formDataTemplate);
+                    setFormData({ ...formDataTemplate });
+                    refetch();
                 }
             })
             .catch((error) => {
@@ -49,8 +51,11 @@ const CreateForm = () => {
 
     if (!show) {
         return (
-            <div>
-                <button onClick={() => handleShowButtonInteraction()}>
+            <div className={styles.createFormContainer}>
+                <button
+                    className={styles.stickyButton}
+                    onClick={() => handleShowButtonInteraction()}
+                >
                     Add patient
                 </button>
             </div>
@@ -58,8 +63,8 @@ const CreateForm = () => {
     }
 
     return (
-        <div>
-            <div>
+        <div className={styles.createFormContainer}>
+            <div className={styles.formGroup}>
                 <FormLine
                     node={Object.entries(formData)[0]}
                     handleFormChange={updateFormData}
@@ -75,7 +80,12 @@ const CreateForm = () => {
                     setConditions={setConditions}
                 />
             </div>
-            <button onClick={() => submitPatient()}>Submit patient</button>
+            <button
+                className={styles.submitButton}
+                onClick={() => submitPatient()}
+            >
+                Submit patient
+            </button>
         </div>
     );
 };
