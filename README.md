@@ -8,7 +8,7 @@ The frontend is created using React through Vite.
 
 ## How to run
 
-The quickest and recommended way to run is to open the solution (.sln) file in Visual Studio and running the default multi-prosject startup configuration (F5) that starts the backend and frontend. The backend would then be available on `https://localhost:7210` and frontend available on `https://localhost:63237/`.
+The quickest and recommended way to run is to open the solution (.sln) file in Visual Studio and running the default multi-project startup configuration (F5) that starts the backend and frontend. The backend would then be available on `https://localhost:7210` and frontend available on `https://localhost:63237/`.
 
 ### Alternatives, which would require changing listening ports
 
