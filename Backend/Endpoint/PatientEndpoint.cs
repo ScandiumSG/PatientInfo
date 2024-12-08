@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -23,7 +24,8 @@ namespace Backend.Endpoint
         {
             List<Patient> patients = await repo.GetAll();
 
-            return TypedResults.Ok(patients);
+            List<PatientOutputDTO> output = patients.Select((p) => ModelToDTOConverter.ConvertPatientToDTO(p)).ToList();
+            return TypedResults.Ok(output);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,7 +38,7 @@ namespace Backend.Endpoint
             {
                 return TypedResults.NotFound();
             }
-
+            PatientOutputDTO output = ModelToDTOConverter.ConvertPatientToDTO(patient);
             return TypedResults.Ok(patient); 
         }
 
@@ -93,7 +95,8 @@ namespace Backend.Endpoint
                 return TypedResults.NotFound();
             }
 
-            return TypedResults.Ok(deletedPatient);
+            PatientOutputDTO output = ModelToDTOConverter.ConvertPatientToDTO(deletedPatient);
+            return TypedResults.Ok(output);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -102,7 +105,8 @@ namespace Backend.Endpoint
         {
             List<Patient> matchingPatients = await repo.GetPatientByName(search.Name);
 
-            return TypedResults.Ok(matchingPatients);
+            List<PatientOutputDTO> output = matchingPatients.Select((p) => ModelToDTOConverter.ConvertPatientToDTO(p)).ToList();
+            return TypedResults.Ok(output);
         }
     }
 }
